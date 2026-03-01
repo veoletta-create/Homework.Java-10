@@ -16,14 +16,14 @@ class RadioTest {
     }
 
     @Test
-    void shouldIgnoreInvalidStationBelow() {
+    void shouldIgnoreStationBelowZero() {
         Radio radio = new Radio();
         radio.setCurrentStation(-1);
         assertEquals(0, radio.getCurrentStation());
     }
 
     @Test
-    void shouldIgnoreInvalidStationAbove() {
+    void shouldIgnoreStationAboveNine() {
         Radio radio = new Radio();
         radio.setCurrentStation(10);
         assertEquals(0, radio.getCurrentStation());
@@ -64,15 +64,36 @@ class RadioTest {
     // ===== Громкость =====
 
     @Test
-    void shouldIncreaseVolume() {
+    void shouldSetValidVolume() {
         Radio radio = new Radio();
         radio.setCurrentVolume(50);
-        radio.increaseVolume();
-        assertEquals(51, radio.getCurrentVolume());
+        assertEquals(50, radio.getCurrentVolume());
     }
 
     @Test
-    void shouldNotIncreaseAboveMax() {
+    void shouldIgnoreVolumeBelowZero() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(-1);
+        assertEquals(0, radio.getCurrentVolume());
+    }
+
+    @Test
+    void shouldIgnoreVolumeAboveMax() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(150);
+        assertEquals(0, radio.getCurrentVolume());
+    }
+
+    @Test
+    void shouldIncreaseVolume() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(99);
+        radio.increaseVolume();
+        assertEquals(100, radio.getCurrentVolume());
+    }
+
+    @Test
+    void shouldNotIncreaseVolumeAboveMax() {
         Radio radio = new Radio();
         radio.setCurrentVolume(100);
         radio.increaseVolume();
@@ -82,23 +103,16 @@ class RadioTest {
     @Test
     void shouldDecreaseVolume() {
         Radio radio = new Radio();
-        radio.setCurrentVolume(10);
-        radio.decreaseVolume();
-        assertEquals(9, radio.getCurrentVolume());
-    }
-
-    @Test
-    void shouldNotDecreaseBelowZero() {
-        Radio radio = new Radio();
-        radio.setCurrentVolume(0);
+        radio.setCurrentVolume(1);
         radio.decreaseVolume();
         assertEquals(0, radio.getCurrentVolume());
     }
 
     @Test
-    void shouldIgnoreInvalidVolume() {
+    void shouldNotDecreaseVolumeBelowZero() {
         Radio radio = new Radio();
-        radio.setCurrentVolume(150);
+        radio.setCurrentVolume(0);
+        radio.decreaseVolume();
         assertEquals(0, radio.getCurrentVolume());
     }
 }
